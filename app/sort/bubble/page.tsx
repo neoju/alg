@@ -28,6 +28,7 @@ export default function BubbleSort() {
   const [elements, setElements] = useState<Record<string, number>[]>([]);
   const [animSpeed, setAnimSpeed] = useAtom(animSpeedAtom);
   const [totalElements, setTotalElements] = useAtom(totalElementsAtom);
+  const [timeTaken, setTimeTaken] = useState<number | null>(null);
 
   const [colorful, setColorful] = useState(true);
   const animDuration = 1000 - animSpeed * 10;
@@ -52,6 +53,8 @@ export default function BubbleSort() {
     setIsSorting(true);
 
     const copy = elements.slice();
+
+    const start = performance.now();
     for (let i = 0; i < copy.length; i++) {
       let swapped = false;
       for (let j = 0; j < copy.length - i - 1; j++) {
@@ -89,6 +92,9 @@ export default function BubbleSort() {
       }
     }
 
+    const end = performance.now();
+
+    setTimeTaken(end - start);
     setIsSorting(false);
   }
 
@@ -98,6 +104,7 @@ export default function BubbleSort() {
       key: index,
     }));
 
+    setTimeTaken(null);
     setCursor(null);
     setNextCursor(null);
     setElements(shuffle(arr));
@@ -141,7 +148,7 @@ export default function BubbleSort() {
               defaultValue={DEFAULT_TOTAL_ELEMENTS}
               step={1}
               minValue={5}
-              maxValue={30}
+              maxValue={100}
               size="sm"
               label="Total Elements"
               onChangeEnd={(total) => setTotalElements(total as number)}
@@ -172,7 +179,7 @@ export default function BubbleSort() {
           </div>
         </div>
 
-        <ul className="bg-default-200 p-2 flex rounded-xl gap-2 mt-2 justify-center items-end h-96 relative">
+        <ul className="bg-default-200 p-2 flex rounded-xl mt-2 justify-center items-end h-96 relative">
           {elements.map((element, index) => (
             <motion.li
               key={element.key}
@@ -181,6 +188,7 @@ export default function BubbleSort() {
               style={{
                 height: element.value,
                 width: `${100 / totalElements}%`,
+                margin: `0 ${100 / totalElements}px`,
               }}
               transition={{
                 ...spring,
@@ -189,6 +197,12 @@ export default function BubbleSort() {
             />
           ))}
         </ul>
+
+        <div className="absolute bottom-2 right-2">
+          <p className="text-sm">
+            {timeTaken ? `Time taken: ${timeTaken.toFixed(2)}ms` : ""}
+          </p>
+        </div>
 
         <Footer />
       </Card>
