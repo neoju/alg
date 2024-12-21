@@ -18,17 +18,23 @@ import {
   totalElementsAtom,
 } from "@/shared/atoms/config";
 
+const abortId = "bubble-sort";
+const description =
+  "Bubble sort is a simple sorting algorithm that repeatedly steps through the list, compares adjacent elements and swaps them if they are in the wrong order." +
+  "The pass through the list is repeated until the list is sorted." +
+  'The algorithm, which is a comparison sort, is named for the way smaller elements "bubble" to the top of the list.' +
+  "Although the algorithm is simple, it is too slow and impractical for most problems even when compared to insertion sort." +
+  "It can be practical if the input is usually in sort order.";
+
 export function BubbleSortPage() {
   const animSpeed = useAtomValue(animSpeedAtom);
   const animDuration = useAtomValue(animDurationAtom);
   const totalElements = useAtomValue(totalElementsAtom);
 
   const [isSorting, setIsSorting] = useState(false);
+  const [elements, setElements] = useState<SortingItem[]>([]);
   const [cursor, setCursor] = useState<number | null>(null);
   const [nextCursor, setNextCursor] = useState<number | null>(null);
-  const [elements, setElements] = useState<SortingItem[]>([]);
-
-  const [colorful, setColorful] = useState(true);
 
   const randomElements = useCallback(() => {
     setCursor(null);
@@ -37,14 +43,8 @@ export function BubbleSortPage() {
   }, [totalElements]);
 
   useEffect(() => {
-    setColorful(animSpeed <= 90);
-  }, [animSpeed]);
-
-  useEffect(() => {
     randomElements();
   }, [randomElements]);
-
-  const abortId = "bubble-sort";
 
   async function sort() {
     if (isSorting) {
@@ -103,22 +103,15 @@ export function BubbleSortPage() {
   function getClassName(index: number) {
     return classNames(
       "rounded-md rounded-b-none bg-default-500",
-      colorful && {
+      animSpeed <= 90 && {
         "bg-primary": index === cursor,
         "bg-success": index === nextCursor,
       },
     );
   }
 
-  const description =
-    "Bubble sort is a simple sorting algorithm that repeatedly steps through the list, compares adjacent elements and swaps them if they are in the wrong order." +
-    "The pass through the list is repeated until the list is sorted." +
-    'The algorithm, which is a comparison sort, is named for the way smaller elements "bubble" to the top of the list.' +
-    "Although the algorithm is simple, it is too slow and impractical for most problems even when compared to insertion sort." +
-    "It can be practical if the input is usually in sort order.";
-
   return (
-    <div>
+    <div className="flex flex-col gap-4">
       <PageHeader title="Bubble Sort" description={description}>
         <p className="text-slate-300 text-sm mt-2">
           Visit the following resource to learn more:{" "}
@@ -128,7 +121,7 @@ export function BubbleSortPage() {
         </p>
       </PageHeader>
 
-      <Card className="p-2 mt-5">
+      <Card className="p-2">
         <SortingToolbar
           isSorting={isSorting}
           onPressRandom={randomElements}

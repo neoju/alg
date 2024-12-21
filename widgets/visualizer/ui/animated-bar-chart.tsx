@@ -1,5 +1,11 @@
-import { motion } from "framer-motion";
+/* eslint-disable react-hooks/exhaustive-deps */
+"use client";
 
+import { useCallback, useEffect, useRef, useState } from "react";
+import { motion } from "framer-motion";
+import classNames from "classnames";
+
+import { throttle } from "@/shared/_";
 import { SortingItem } from "@/shared/types";
 
 const spring = {
@@ -15,24 +21,54 @@ type Props = {
 };
 
 export function AnimatedBarChart(props: Props) {
+  const wrapperRef = useRef<HTMLDivElement>(null);
+  const [showNumbers, setShowNumbers] = useState(true);
+  const elementWidth = 100 / props.elements.length;
+
+  const handleResize = useCallback(throttle(updateUI, 333), [props.elements]);
+
+  useEffect(() => {
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
+  useEffect(() => {
+    updateUI();
+  }, [props.elements]);
+
+  function updateUI() {
+    if (wrapperRef.current) {
+      const { width } = wrapperRef.current.getBoundingClientRect();
+      setShowNumbers(width / props.elements.length > 30);
+    }
+  }
+
   return (
-    <div className="text-xs">
+    <div ref={wrapperRef} className="text-xs">
       <ul className="bg-default-200 p-2 flex rounded-xl mt-2 justify-center items-end h-96">
         {props.elements.map((element, index) => (
           <motion.li
             key={element.key}
             layout
-            className={props.getElClassName(index)}
+            className={classNames(
+              props.getElClassName(index),
+              "text-black flex justify-center items-end",
+            )}
             style={{
               height: element.value,
-              width: `${100 / props.elements.length}%`,
-              margin: `0 ${100 / props.elements.length}px`,
+              width: `${elementWidth}%`,
+              margin: `0 ${Math.min(elementWidth, 3)}px`,
             }}
             transition={{
               ...spring,
               duration: props.animDuration,
             }}
-          />
+          >
+            <span>{showNumbers ? element.value : ""}</span>
+          </motion.li>
         ))}
       </ul>
 

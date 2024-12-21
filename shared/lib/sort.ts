@@ -19,9 +19,9 @@ export function shuffle<T>(array: T[]): T[] {
 
 export function genBarchartData(length: number): SortingItem[] {
   return Array.from({ length }, (_, index) => ({
-    // generate random value between 0 and 320
+    // generate random value between 10 and 320
     // 320 is the maximum height of the bar
-    value: Math.floor(Math.random() * 320),
+    value: Math.floor(Math.random() * (320 - 10) + 10),
     key: index,
   }));
 }
