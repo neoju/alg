@@ -1,6 +1,7 @@
 "use client";
 
 import { PropsWithChildren } from "react";
+import { usePathname } from "next/navigation";
 import { BreadcrumbItem, Breadcrumbs } from "@nextui-org/react";
 
 type Props = {
@@ -10,6 +11,7 @@ type Props = {
 };
 
 export function PageHeader(props: PropsWithChildren<Props>) {
+  const pathname = usePathname();
   return (
     <div className="page__header">
       <Breadcrumbs>
@@ -19,9 +21,7 @@ export function PageHeader(props: PropsWithChildren<Props>) {
             {breadcrumb.text}
           </BreadcrumbItem>
         ))}
-        <BreadcrumbItem href={window.location.href}>
-          {props.title}
-        </BreadcrumbItem>
+        <BreadcrumbItem href={pathname}>{props.title}</BreadcrumbItem>
       </Breadcrumbs>
 
       <h1 className="text-2xl my-5">{props.title}</h1>
