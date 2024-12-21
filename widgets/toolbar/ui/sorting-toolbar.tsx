@@ -1,5 +1,6 @@
 import { useSetAtom } from "jotai";
-import { Slider, Button } from "@nextui-org/react";
+import { Button } from "@nextui-org/button";
+import { Slider } from "@nextui-org/slider";
 
 import {
   animSpeedAtom,

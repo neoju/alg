@@ -2,7 +2,7 @@
 
 import { PropsWithChildren } from "react";
 import { usePathname } from "next/navigation";
-import { BreadcrumbItem, Breadcrumbs } from "@nextui-org/react";
+import { BreadcrumbItem, Breadcrumbs } from "@nextui-org/breadcrumbs";
 
 type Props = {
   title: string;

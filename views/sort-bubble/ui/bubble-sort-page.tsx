@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useState } from "react";
 import classNames from "classnames";
 import { useAtomValue } from "jotai";
-import { Card, Link } from "@nextui-org/react";
+import { Card } from "@nextui-org/card";
 
 import { PageHeader } from "@/widgets/header";
 import { SortingToolbar } from "@/widgets/toolbar";
@@ -17,6 +17,7 @@ import {
   animSpeedAtom,
   totalElementsAtom,
 } from "@/shared/atoms/config";
+import Link from "next/link";
 
 const abortId = "bubble-sort";
 const description =
@@ -102,7 +103,6 @@ export function BubbleSortPage() {
 
   function getClassName(index: number) {
     return classNames(
-      "rounded-md rounded-b-none bg-default-500",
       animSpeed <= 90 && {
         "bg-primary": index === cursor,
         "bg-success": index === nextCursor,
@@ -115,7 +115,11 @@ export function BubbleSortPage() {
       <PageHeader title="Bubble Sort" description={description}>
         <p className="text-slate-300 text-sm mt-2">
           Visit the following resource to learn more:{" "}
-          <Link href="https://roadmap.sh/computer-science" target="_blank">
+          <Link
+            className=""
+            href="https://roadmap.sh/computer-science"
+            target="_blank"
+          >
             https://roadmap.sh/computer-science
           </Link>
         </p>

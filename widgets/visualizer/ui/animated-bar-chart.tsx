@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
@@ -25,19 +24,17 @@ export function AnimatedBarChart(props: Props) {
   const [showNumbers, setShowNumbers] = useState(true);
   const elementWidth = 100 / props.elements.length;
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const handleResize = useCallback(throttle(updateUI, 333), [props.elements]);
 
   useEffect(() => {
+    handleResize();
     window.addEventListener("resize", handleResize);
 
     return () => {
       window.removeEventListener("resize", handleResize);
     };
-  }, []);
-
-  useEffect(() => {
-    updateUI();
-  }, [props.elements]);
+  }, [props.elements, handleResize]);
 
   function updateUI() {
     if (wrapperRef.current) {
@@ -48,29 +45,34 @@ export function AnimatedBarChart(props: Props) {
 
   return (
     <div ref={wrapperRef} className="text-xs">
-      <ul className="bg-default-200 p-2 flex rounded-xl mt-2 justify-center items-end h-96">
+      <div className="bg-default-200 p-2 flex rounded-xl mt-2 justify-center items-end h-96">
         {props.elements.map((element, index) => (
-          <motion.li
+          <div
             key={element.key}
-            layout
-            className={classNames(
-              props.getElClassName(index),
-              "text-black flex justify-center items-end",
-            )}
             style={{
-              height: element.value,
               width: `${elementWidth}%`,
-              margin: `0 ${Math.min(elementWidth, 3)}px`,
-            }}
-            transition={{
-              ...spring,
-              duration: props.animDuration,
+              textAlign: "center",
             }}
           >
+            <motion.div
+              layout
+              className={classNames(
+                props.getElClassName(index),
+                "text-black flex justify-center items-end rounded-t-md bg-default-500",
+              )}
+              style={{
+                height: element.value,
+                margin: `0 ${Math.min(elementWidth, 3)}px`,
+              }}
+              transition={{
+                ...spring,
+                duration: props.animDuration,
+              }}
+            ></motion.div>
             <span>{showNumbers ? element.value : ""}</span>
-          </motion.li>
+          </div>
         ))}
-      </ul>
+      </div>
 
       <div className="flex justify-center gap-4 mt-2">
         <div className="flex items-center gap-2">

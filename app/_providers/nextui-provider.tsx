@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { NextUIProvider as Provider } from "@nextui-org/react";
+import { NextUIProvider as Provider } from "@nextui-org/system";
 
 // Only if using TypeScript
 declare module "@react-types/shared" {
