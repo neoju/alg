@@ -1,4 +1,4 @@
-import { BubbleSortPage } from "@/pages/sort-bubble";
+import { BubbleSortPage } from "@/views/sort-bubble";
 
 export const metadata = {
   title: "AlgoViz | Bubble Sort",
