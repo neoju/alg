@@ -1,5 +1,6 @@
-import { SortingItem } from "@/shared/types";
 import { motion } from "framer-motion";
+
+import { SortingItem } from "@/shared/types";
 
 const spring = {
   type: "spring",

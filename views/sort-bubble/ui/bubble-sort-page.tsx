@@ -102,7 +102,7 @@ export function BubbleSortPage() {
 
   function getClassName(index: number) {
     return classNames(
-      "rounded-t-md bg-default-500",
+      "rounded-md rounded-b-none bg-default-500",
       colorful && {
         "bg-primary": index === cursor,
         "bg-success": index === nextCursor,

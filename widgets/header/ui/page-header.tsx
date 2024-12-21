@@ -19,6 +19,9 @@ export function PageHeader(props: PropsWithChildren<Props>) {
             {breadcrumb.text}
           </BreadcrumbItem>
         ))}
+        <BreadcrumbItem href={window.location.href}>
+          {props.title}
+        </BreadcrumbItem>
       </Breadcrumbs>
 
       <h1 className="text-2xl my-5">{props.title}</h1>
