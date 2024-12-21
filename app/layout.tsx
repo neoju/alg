@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
-import { NextUIProvider } from "@nextui-org/react";
-import { Provider as JotaiProvider } from "jotai";
+import { Providers } from "@/components/providers";
 
 import "./globals.css";
 
@@ -30,9 +29,7 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <JotaiProvider>
-          <NextUIProvider>{children}</NextUIProvider>
-        </JotaiProvider>
+        <Providers>{children}</Providers>
       </body>
     </html>
   );
