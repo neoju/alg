@@ -16,7 +16,6 @@
     "@nextui-org/slider": "^2.4.5",
     "@nextui-org/system": "^2.4.4",
     "@nextui-org/theme": "^2.4.3",
-    "classnames": "^2.5.1",
     "framer-motion": "^11.15.0",
     "jotai": "^2.10.4",
     "next": "^15.1.2",

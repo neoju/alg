@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
-import classNames from "classnames";
+import { cn } from "@nextui-org/theme";
 
 import { throttle } from "@/shared/_";
 import { SortingItem } from "@/shared/types";
@@ -14,8 +14,10 @@ const spring = {
 };
 
 type Props = {
+  cursor: number | null;
   elements: SortingItem[];
   animDuration: number;
+  itemDes?: { background: string; text: string }[];
   getElClassName: (index: number) => string;
 };
 
@@ -45,50 +47,65 @@ export function AnimatedBarChart(props: Props) {
 
   return (
     <div ref={wrapperRef} className="text-xs">
-      <div className="bg-default-200 p-2 flex rounded-xl mt-2 justify-center items-end h-96">
+      <div className="bg-default-200 p-2 pb-7 flex rounded-xl mt-2 justify-center items-end h-96 relative">
         {props.elements.map((element, index) => (
           <div
             key={element.key}
-            style={{
-              width: `${elementWidth}%`,
-              textAlign: "center",
-            }}
+            style={{ width: `${elementWidth}%`, textAlign: "center" }}
           >
             <motion.div
               layout
-              className={classNames(
-                props.getElClassName(index),
+              className={cn(
                 "text-black flex justify-center items-end rounded-t-md bg-default-500",
+                props.getElClassName(index),
               )}
               style={{
                 height: element.value,
                 margin: `0 ${Math.min(elementWidth, 3)}px`,
               }}
-              transition={{
-                ...spring,
-                duration: props.animDuration,
-              }}
-            ></motion.div>
+              transition={{ ...spring, duration: props.animDuration }}
+            />
             <span>{showNumbers ? element.value : ""}</span>
           </div>
         ))}
+
+        <motion.div
+          layout
+          className={cn(
+            "h-4 w-14 bg-default-400 absolute bottom-2 rounded text-center",
+            props.animDuration >= 200 && "bg-primary h-4 w-4",
+          )}
+          style={{
+            left:
+              props.animDuration >= 200
+                ? `calc((100% - 16px) / ${props.elements.length} * ${props.cursor! + 1} - ${elementWidth / 2}%)`
+                : `50%`,
+          }}
+        >
+          {props.animDuration < 200 ? "¯\\_(ツ)_/¯" : ""}
+        </motion.div>
       </div>
 
-      <div className="flex justify-center gap-4 mt-2">
-        <div className="flex items-center gap-2">
-          <span className="bg-primary h-4 w-4 inline-block rounded"></span>
-          <span>current item</span>
-        </div>
-        <div className="flex items-center gap-2">
-          <span className="bg-success h-4 w-4 inline-block rounded"></span>
-          <span> item to swap</span>
-        </div>
-      </div>
-      <div className="flex justify-center gap-4 mt-2">
-        <p>
-          To enable colorful mode please keep animation speed lowser than 91
-        </p>
-      </div>
+      {props.itemDes && (
+        <>
+          <div className="flex justify-center gap-4 mt-2">
+            {props.itemDes.map((item) => (
+              <div className="flex items-center gap-2" key={item.background}>
+                <span
+                  className={cn(
+                    "h-4 w-4 inline-block rounded",
+                    item.background,
+                  )}
+                ></span>
+                <span>{item.text}</span>
+              </div>
+            ))}
+          </div>
+          <div className="flex justify-center gap-4 mt-2">
+            To enable colorful mode please keep animation speed between 0-90
+          </div>
+        </>
+      )}
     </div>
   );
 }
