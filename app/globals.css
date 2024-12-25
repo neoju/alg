@@ -18,3 +18,8 @@ body {
   color: var(--foreground);
   background: var(--background);
 }
+
+a {
+  text-decoration: underline;
+  @apply text-sky-600 hover:text-sky-500;
+}
