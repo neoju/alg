@@ -1,13 +1,8 @@
-import { useSetAtom } from "jotai";
+import { useAtom } from "jotai";
 import { Button } from "@nextui-org/button";
 import { Slider } from "@nextui-org/slider";
 
-import {
-  animSpeedAtom,
-  totalElementsAtom,
-  DEFAULT_ANIM_SPEED,
-  DEFAULT_TOTAL_ELEMENTS,
-} from "@/shared/atoms/config";
+import { animSpeedAtom, totalElementsAtom } from "@/shared/atoms/config";
 
 type Props = {
   isSorting?: boolean;
@@ -16,8 +11,8 @@ type Props = {
 };
 
 export function SortingToolbar(props: Props) {
-  const setAnimSpeed = useSetAtom(animSpeedAtom);
-  const setTotalElements = useSetAtom(totalElementsAtom);
+  const [animSpeed, setAnimSpeed] = useAtom(animSpeedAtom);
+  const [totalElements, setTotalElements] = useAtom(totalElementsAtom);
 
   return (
     <div className="bg-default-200 p-2 flex flex-wrap rounded-xl gap-4 justify-end">
@@ -25,7 +20,7 @@ export function SortingToolbar(props: Props) {
         <Slider
           isDisabled={props.isSorting}
           className="max-w-sm"
-          defaultValue={DEFAULT_ANIM_SPEED}
+          defaultValue={animSpeed}
           step={1}
           minValue={0}
           maxValue={100}
@@ -37,7 +32,7 @@ export function SortingToolbar(props: Props) {
         <Slider
           isDisabled={props.isSorting}
           className="max-w-sm"
-          defaultValue={DEFAULT_TOTAL_ELEMENTS}
+          defaultValue={totalElements}
           step={1}
           minValue={5}
           maxValue={100}

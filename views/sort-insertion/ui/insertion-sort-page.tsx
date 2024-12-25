@@ -33,6 +33,7 @@ export function InsertionSortPage() {
   const [elements, setElements] = useState<SortingItem[]>([]);
   const [cursor, setCursor] = useState<number | null>(null);
   const [keyIndex, setKeyIndex] = useState<number | null>(null);
+  const [indexToSwap, setIndexToSwap] = useState<number | null>(null);
 
   const randomElements = useCallback(() => {
     setCursor(null);
@@ -71,18 +72,21 @@ export function InsertionSortPage() {
         }
 
         setCursor(prev);
+        setIndexToSwap(prev);
         await sleep(animDuration);
 
         swap(elements, prev, prev + 1);
         setElements([...elements]);
-        prev -= 1;
+        setKeyIndex(prev);
+        setIndexToSwap(null);
         await sleep(animDuration);
+        prev -= 1;
       }
 
       setElements([...elements]);
-      await sleep(animDuration);
     }
 
+    setIndexToSwap(null);
     setKeyIndex(null);
     setCursor(null);
     setIsSorting(false);
@@ -91,7 +95,8 @@ export function InsertionSortPage() {
   function getClassName(index: number) {
     return cn(
       animSpeed <= 90 && {
-        "bg-primary": index === keyIndex,
+        "bg-secondary": index === keyIndex,
+        "bg-success": index === indexToSwap,
       },
     );
   }
@@ -118,7 +123,13 @@ export function InsertionSortPage() {
           cursor={cursor}
           elements={elements}
           animDuration={animDuration}
-          itemDes={[{ background: "bg-primary", text: "Key" }]}
+          itemDes={[
+            { background: "bg-secondary", text: "Key" },
+            {
+              background: "bg-success",
+              text: "Element to swap, greater than key",
+            },
+          ]}
           getElClassName={getClassName}
         />
       </Card>
